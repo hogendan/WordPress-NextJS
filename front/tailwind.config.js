@@ -6,7 +6,12 @@ module.exports = {
     "./components/**/*.{js,ts,jsx,tsx,mdx}",
   ],
   theme: {
-    extend: {},
+    extend: {
+      fontFamily: {
+        'body': ['Noto Sans JP', 'sans-serif'],
+        'accent': ['YuGothic', 'sans-serif']
+      },
+    },
   },
   plugins: [
     require('@tailwindcss/forms'),
