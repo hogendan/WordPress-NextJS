@@ -1,6 +1,9 @@
 import Image from "next/image";
 
 export default function Home() {
+  // GraphQL を呼び出して、結果をconsole出力
+  getPreviewPost().then((data) => console.log(JSON.stringify(data)));
+
   return (
     <>
       {/*
@@ -84,4 +87,47 @@ export default function Home() {
       </div>
     </>
   )
+}
+
+async function fetchAPI(query = "", { variables }: Record<string, any> = {}) {
+  const headers = { "Content-Type": "application/json" };
+
+  // if (process.env.WORDPRESS_AUTH_REFRESH_TOKEN) {
+  //   headers["Authorization"] =
+  //     `Bearer ${process.env.WORDPRESS_AUTH_REFRESH_TOKEN}`;
+  // }
+
+  // WPGraphQL Plugin must be enabled
+  const res = await fetch('http://localhost:8000/graphql', {
+    headers,
+    method: "POST",
+    body: JSON.stringify({
+      query,
+      variables,
+    }),
+  });
+
+  const json = await res.json();
+  if (json.errors) {
+    console.error(json.errors);
+    throw new Error("Failed to fetch API");
+  }
+  return json.data;
+}
+
+export async function getPreviewPost() {
+  const data = await fetchAPI(
+    `
+    query NewQuery {
+  posts {
+    edges {
+      node {
+        title
+        content
+      }
+    }
+  }
+}`
+  );
+  return data.posts;
 }
