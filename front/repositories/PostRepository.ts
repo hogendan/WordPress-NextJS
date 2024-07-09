@@ -1,7 +1,7 @@
 import Repository from "./Repository";
 
 class PostRepository {
-    public getList() {
+    static getList() {
         return Repository(`query PostListQuery {
             posts {
                 edges {
