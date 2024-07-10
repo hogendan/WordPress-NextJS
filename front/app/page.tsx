@@ -1,10 +1,16 @@
 import Image from "next/image";
 import PostService from "@/services/PostService";
+import PostType from "@/PostType";
+import { GetStaticProps } from "next";
 
-export default function Home() {
-  const postService = PostService
-  postService.getList().then((data) => console.log(JSON.stringify(data, null, 2)))
+export default async function Home() {
+  const allProps = await PostService.getList()
   return (
-    <div></div>
+    <div>
+      {allProps.map((data) => {
+        return <p key={data.id}>{data.title}</p>
+      })}
+
+    </div>
   )
 }
